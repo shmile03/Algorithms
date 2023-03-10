@@ -8,6 +8,7 @@ class Sort {
 private:
 
 	static void swap(T* a, T* b);
+    static void merge(std::vector<T>& a, int l, int m, int r);
 
 public:
 
@@ -16,6 +17,7 @@ public:
 	static void bubbleSort(std::vector<T>& a);
     static void insertionSort(std::vector<T>& a);
     static void selectionSort(std::vector<T>& a);
+    static void mergeSort(std::vector<T>& a, int l, int r);
 };
 
 template<class T>
@@ -51,14 +53,68 @@ void Sort<T>::insertionSort(std::vector<T>& a) {
 
 template<class T>
 void Sort<T>::selectionSort(std::vector<T>& a) {
-    T tmpMin = 0;
-    for (int i = 0; i < a.size() - 1; ++i) {
-        tmpMin = i;
-        for (int j = i + 1; j < a.size(); ++j) {
-            if (a[j] < a[tmpMin]) {
-                tmpMin = j;
-            }
-        }
-        swap(&a[tmpMin], &a[i]);
+	T tmpMin = 0;
+	for (int i = 0; i < a.size() - 1; ++i) {
+		tmpMin = i;
+		for (int j = i + 1; j < a.size(); ++j) {
+			if (a[j] < a[tmpMin]) {
+				tmpMin = j;
+			}
+		}
+		swap(&a[tmpMin], &a[i]);
+	}
+}
+
+template<class T>
+void Sort<T>::merge(std::vector<T>& a, int l, int m, int r) {
+	int tmp1 = m - l + 1;
+	int tmp2 = r - m;
+
+	std::vector<T> L(tmp1), R(tmp2);
+
+	for (int i = 0; i < tmp1; ++i) {
+		L[i] = a[l + i];
+	}
+	for (int j = 0; j < tmp2; ++j) {
+		R[j] = a[m + 1 + j];
+	}
+
+	int i = 0, j = 0, k = l;
+
+	while (i < tmp1 && j < tmp2) {
+		if (L[i] <= R[j]) {
+			a[k] = L[i];
+			++i;
+		}
+		else {
+			a[k] = R[j];
+			++j;
+		}
+		++k;
+	}
+
+	while (i < tmp1) {
+		a[k] = L[i];
+		++i;
+		++k;
+	}
+
+	while (j < tmp2) {
+		a[k] = R[j];
+		++j;
+		++k;
+	}
+}
+
+template<class T>
+void Sort<T>::mergeSort(std::vector<T>& a, int l, int r) {
+    int m = 0;
+    if (l < r) {
+        m = l + (r - l) / 2;
+
+        mergeSort(a, l, m);
+        mergeSort(a, m + 1, r);
+
+        merge(a, l, m, r);
     }
 }
