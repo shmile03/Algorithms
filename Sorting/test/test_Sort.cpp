@@ -100,3 +100,51 @@ TEST(Sort, merge_sorting_happened) {
 
     EXPECT_EQ(true, flag);
 }
+
+TEST(Sort, heap_sorting_happened) {
+
+    std::vector<int> vector(LENGTH);
+
+    srand(time(NULL));
+    int tmp = 0;
+    for (int i = 0; i < LENGTH; ++i) {
+        tmp = rand() % 1000;
+        vector.push_back(tmp);
+    }
+
+    Sort<int>::heapSort(vector, LENGTH - 1);
+
+    bool flag = true;
+    for (int i = 0; i < LENGTH - 1; ++i) {
+        if (vector[i + 1] < vector[i]) {
+            flag = false;
+            break;
+        }
+    }
+
+    EXPECT_EQ(true, flag);
+}
+
+TEST(Sort, quick_sorting_happened) {
+
+    std::vector<int> vector(LENGTH);
+
+    srand(time(NULL));
+    int tmp = 0;
+    for (int i = 0; i < LENGTH; ++i) {
+        tmp = rand() % 1000;
+        vector.push_back(tmp);
+    }
+
+    Sort<int>::quickSort(vector, 0, LENGTH - 1);
+
+    bool flag = true;
+    for (int i = 0; i < LENGTH - 1; ++i) {
+        if (vector[i + 1] < vector[i]) {
+            flag = false;
+            break;
+        }
+    }
+
+    EXPECT_EQ(true, flag);
+}

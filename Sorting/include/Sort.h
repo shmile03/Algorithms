@@ -9,6 +9,8 @@ private:
 
 	static void swap(T* a, T* b);
     static void merge(std::vector<T>& a, int l, int m, int r);
+    static void heapify(std::vector<T>& a, int n, int i);
+    static int partition(std::vector<T>& a, int low, int high);
 
 public:
 
@@ -18,6 +20,8 @@ public:
     static void insertionSort(std::vector<T>& a);
     static void selectionSort(std::vector<T>& a);
     static void mergeSort(std::vector<T>& a, int l, int r);
+    static void heapSort(std::vector<T>& a, int n);
+    static void quickSort(std::vector<T>& a, int low, int high);
 };
 
 template<class T>
@@ -116,5 +120,60 @@ void Sort<T>::mergeSort(std::vector<T>& a, int l, int r) {
         mergeSort(a, m + 1, r);
 
         merge(a, l, m, r);
+    }
+}
+
+template<class T>
+void Sort<T>::heapify(std::vector<T>& a, int n, int i) {
+    int largest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+
+    if (l < n && a[l] > a[largest]) {
+        largest = l;
+    }
+    if (r < n && a[r] > a[largest]) {
+        largest = r;
+    }
+    if (largest != i) {
+        swap(&a[i], &a[largest]);
+        heapify(a, n, largest);
+    }
+}
+
+template<class T>
+void Sort<T>::heapSort(std::vector<T>& a, int n) {
+    for (int i = n / 2 - 1; i >= 0; --i) {
+        heapify(a, n, i);
+    }
+    for (int i = n - 1; i >= 0; --i) {
+        swap(&a[0], &a[i]);
+        heapify(a, i, 0);
+    }
+}
+
+template<class T>
+int Sort<T>::partition(std::vector<T>& a, int low, int high) {
+    T pivot = a[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; ++j) {
+        if (a[j] < pivot) {
+            ++i;
+            swap(&a[i], &a[j]);
+        }
+    }
+    swap(&a[i + 1], &a[high]);
+    return i + 1;
+}
+
+template<class T>
+void Sort<T>::quickSort(std::vector<T>& a, int low, int high) {
+    int tmp = 0;
+    if (low < high) {
+        tmp = partition(a, low, high);
+
+        quickSort(a, low, tmp - 1);
+        quickSort(a, tmp + 1, high);
     }
 }
